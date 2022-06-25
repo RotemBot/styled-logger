@@ -1,0 +1,1 @@
+export { loggerGenerator } from './logger';

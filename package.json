@@ -1,0 +1,31 @@
+{
+  "name": "@rotembot/styled-logger",
+  "version": "1.0.0",
+  "description": "A simple styled logger for javascript applications",
+  "main": "index.js",
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "build": "tsc -b"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RotemBot/styled-logger.git"
+  },
+  "keywords": [
+    "logger"
+  ],
+  "author": "Rotem Botavia",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RotemBot/styled-logger/issues"
+  },
+  "homepage": "https://github.com/RotemBot/styled-logger#readme",
+  "dependencies": {
+    "typescript": "^4.7.4"
+  }
+}

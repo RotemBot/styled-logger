@@ -1,6 +1,6 @@
 {
   "name": "@rotembot/styled-logger",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple styled logger for javascript applications",
   "main": "index.js",
   "files": [

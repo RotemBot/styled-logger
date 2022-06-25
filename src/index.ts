@@ -1,1 +1,1 @@
-export * from './logger'
+export { loggerGenerator } from './logger'

@@ -1,6 +1,6 @@
 {
   "name": "styled-logger",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "description": "A simple styled logger for javascript applications",
   "main": "./dist/index.js",
   "files": [

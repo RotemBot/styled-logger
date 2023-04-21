@@ -38,8 +38,21 @@ const colorize = (text: string, color: ConsoleStyle): string => {
 }
 
 export type LogLevel = 'debug' | 'info' | 'warn' | 'error'
+enum LogLevelEnum {
+    debug = 1,
+    info,
+    warn,
+    error,
+}
 
-export const loggerGenerator = (name: string): ILogger => {
+interface LoggerConfig {
+    minLogLevel?: LogLevel
+}
+
+
+export const loggerGenerator = (name: string, config?: LoggerConfig): ILogger => {
+    const minLogLevel = config?.minLogLevel ? LogLevelEnum[config.minLogLevel] : LogLevelEnum.debug
+
     const _getPrefix = (level: LogLevel): string => {
         let levelColor: ConsoleStyle
         switch (level) {
@@ -63,23 +76,31 @@ export const loggerGenerator = (name: string): ILogger => {
     }
 
     const debug = (message?: string, ...optionalParams: any[]) => {
-        message = message ?? ''
-        console.debug(_getPrefix('debug'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams)
+        if (LogLevelEnum.debug >= minLogLevel) {
+            message = message ?? ''
+            console.debug(_getPrefix('debug'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams)
+        }
     }
 
     const info = (message?: string, ...optionalParams: any[]) => {
-        message = message ?? ''
-        console.info(_getPrefix('info'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams)
+        if (LogLevelEnum.info >= minLogLevel) {
+            message = message ?? ''
+            console.info(_getPrefix('info'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams)
+        }
     }
 
     const warn = (message?: string, ...optionalParams: any[]) => {
-        message = message ?? ''
-        console.warn(_getPrefix('warn'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams)
+        if (LogLevelEnum.warn >= minLogLevel) {
+            message = message ?? ''
+            console.warn(_getPrefix('warn'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams)
+        }
     }
 
     const error = (message?: string, ...optionalParams: any[]) => {
-        message = message ?? ''
-        console.error(_getPrefix('error'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams)
+        if (LogLevelEnum.error >= minLogLevel) {
+            message = message ?? ''
+            console.error(_getPrefix('error'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams)
+        }
     }
 
     return {

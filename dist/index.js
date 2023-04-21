@@ -27,7 +27,18 @@ var ConsoleStyle;
     ConsoleStyle["BgCyan"] = "\u001B[46m";
     ConsoleStyle["BgGray"] = "\u001B[47m";
 })(ConsoleStyle || (ConsoleStyle = {}));
-const loggerGenerator = (name) => {
+const colorize = (text, color) => {
+    return `${color}${text}${ConsoleStyle.Reset}`;
+};
+var LogLevelEnum;
+(function (LogLevelEnum) {
+    LogLevelEnum[LogLevelEnum["debug"] = 1] = "debug";
+    LogLevelEnum[LogLevelEnum["info"] = 2] = "info";
+    LogLevelEnum[LogLevelEnum["warn"] = 3] = "warn";
+    LogLevelEnum[LogLevelEnum["error"] = 4] = "error";
+})(LogLevelEnum || (LogLevelEnum = {}));
+const loggerGenerator = (name, config) => {
+    const minLogLevel = (config === null || config === void 0 ? void 0 : config.minLogLevel) ? LogLevelEnum[config.minLogLevel] : LogLevelEnum.debug;
     const _getPrefix = (level) => {
         let levelColor;
         switch (level) {
@@ -46,21 +57,31 @@ const loggerGenerator = (name) => {
             default:
                 levelColor = ConsoleStyle.Bright;
         }
-        return `${ConsoleStyle.FgGray}[${new Date().toLocaleString('en-GB')}]${ConsoleStyle.Reset}`
-            + ` ${levelColor}${level.toUpperCase()}${ConsoleStyle.Reset}`
-            + ` | [${ConsoleStyle.Bright}${name.toUpperCase()}${ConsoleStyle.Reset}] ${ConsoleStyle.FgBlue}`;
+        return `${colorize(`[${new Date().toLocaleString('en-GB')}]`, ConsoleStyle.FgGray)} ${colorize(level.toUpperCase(), levelColor)} | [${colorize(name.toUpperCase(), ConsoleStyle.Bright)}] ${ConsoleStyle.FgBlue}`;
     };
     const debug = (message, ...optionalParams) => {
-        console.debug(_getPrefix('debug'), message + ConsoleStyle.Reset, ...optionalParams);
+        if (LogLevelEnum.debug >= minLogLevel) {
+            message = message !== null && message !== void 0 ? message : '';
+            console.debug(_getPrefix('debug'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams);
+        }
     };
     const info = (message, ...optionalParams) => {
-        console.info(_getPrefix('info'), message + ConsoleStyle.Reset, ...optionalParams);
+        if (LogLevelEnum.info >= minLogLevel) {
+            message = message !== null && message !== void 0 ? message : '';
+            console.info(_getPrefix('info'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams);
+        }
     };
     const warn = (message, ...optionalParams) => {
-        console.warn(_getPrefix('warn'), message + ConsoleStyle.Reset, ...optionalParams);
+        if (LogLevelEnum.warn >= minLogLevel) {
+            message = message !== null && message !== void 0 ? message : '';
+            console.warn(_getPrefix('warn'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams);
+        }
     };
     const error = (message, ...optionalParams) => {
-        console.error(_getPrefix('error'), message + ConsoleStyle.Reset, ...optionalParams);
+        if (LogLevelEnum.error >= minLogLevel) {
+            message = message !== null && message !== void 0 ? message : '';
+            console.error(_getPrefix('error'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams);
+        }
     };
     return {
         debug,

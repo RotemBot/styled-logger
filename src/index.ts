@@ -33,8 +33,14 @@ enum ConsoleStyle {
     BgGray = "\x1b[47m",
 }
 
+const colorize = (text: string, color: ConsoleStyle): string => {
+    return `${color}${text}${ConsoleStyle.Reset}`
+}
+
+export type LogLevel = 'debug' | 'info' | 'warn' | 'error'
+
 export const loggerGenerator = (name: string): ILogger => {
-    const _getPrefix = (level: string): string => {
+    const _getPrefix = (level: LogLevel): string => {
         let levelColor: ConsoleStyle
         switch (level) {
             case 'debug':
@@ -53,22 +59,29 @@ export const loggerGenerator = (name: string): ILogger => {
                 levelColor = ConsoleStyle.Bright
         }
 
-        return `${ConsoleStyle.FgGray}[${new Date().toLocaleString('en-GB')}]${ConsoleStyle.Reset}`
-            + ` ${levelColor}${level.toUpperCase()}${ConsoleStyle.Reset}`
-            + ` | [${ConsoleStyle.Bright}${name.toUpperCase()}${ConsoleStyle.Reset}] ${ConsoleStyle.FgBlue}`
+        return `${colorize(`[${new Date().toLocaleString('en-GB')}]`, ConsoleStyle.FgGray)} ${colorize(level.toUpperCase(), levelColor)} | [${colorize(name.toUpperCase(), ConsoleStyle.Bright)}] ${ConsoleStyle.FgBlue}`
     }
+
     const debug = (message?: string, ...optionalParams: any[]) => {
-        console.debug(_getPrefix('debug'), message + ConsoleStyle.Reset, ...optionalParams)
+        message = message ?? ''
+        console.debug(_getPrefix('debug'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams)
     }
+
     const info = (message?: string, ...optionalParams: any[]) => {
-        console.info(_getPrefix('info'), message + ConsoleStyle.Reset, ...optionalParams)
+        message = message ?? ''
+        console.info(_getPrefix('info'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams)
     }
+
     const warn = (message?: string, ...optionalParams: any[]) => {
-        console.warn(_getPrefix('warn'), message + ConsoleStyle.Reset, ...optionalParams)
+        message = message ?? ''
+        console.warn(_getPrefix('warn'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams)
     }
+
     const error = (message?: string, ...optionalParams: any[]) => {
-        console.error(_getPrefix('error'), message + ConsoleStyle.Reset, ...optionalParams)
+        message = message ?? ''
+        console.error(_getPrefix('error'), colorize(message, ConsoleStyle.FgBlue) + ConsoleStyle.Reset, ...optionalParams)
     }
+
     return {
         debug,
         info,
